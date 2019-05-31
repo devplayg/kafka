@@ -61,6 +61,19 @@ docker pull ubuntu
     172.17.0.6
     172.17.0.7
     ```
+    
+## 호스트 파일 설정
+
+    ```
+    vi /etc/hosts
+    ---
+    172.17.0.2      zoo1
+    172.17.0.3      zoo2
+    172.17.0.4      zoo3
+    172.17.0.5      kafka1
+    172.17.0.6      kafka2
+    172.17.0.7      kafka3
+    ```
 
 ## 컨테이너 개별 설정
 
@@ -68,7 +81,10 @@ docker pull ubuntu
     
     ```
     sed -i s#archive\.ubuntu\.com#mirror.kakao.com#g /etc/apt/sources.list
-    apt update && apt install -y vim net-tools openjdk-11-jdk inetutils-ping telnet curl
+    apt update && apt install -y vim net-tools inetutils-ping telnet curl openssh-server openjdk-11-jdk
+    echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+    echo "root:1234" | chpasswd
+    service ssh start
     ```
 
 * Java 버전 확인
@@ -87,24 +103,33 @@ docker pull ubuntu
     curl -sL http://apache.mirror.cdnetworks.com/kafka/2.2.0/kafka_2.12-2.2.0.tgz | tar xvz -C /
     mv /kafka_2.12-2.2.0/ /kafka
     ```
+
+## Tip
+
+    ```
+    vi ~/.profile && . ~/.profile
+    ---
+    export ZOOKEEPER=zoo1:2181,zoo2:2181,zoo3:2181/my-kafka
+    export KAFKA=kafka1:9092,kafka2:9092,kafka3:9092
+    export KAFKA_HOME=/kafka
+    
+    alias .pro='vi ~/.profile'
+    alias pro='. ~/.profile'
+    alias kconf='vi $KAFKA_HOME/config/server.properties'
+    alias zconf='vi $KAFKA_HOME/config/zookeeper.properties'
+    alias zstart='$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties'
+    alias zstop='$KAFKA_HOME/bin/zookeeper-server-stop.sh'
+    alias kstart='$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties'
+    alias kstop='$KAFKA_HOME/bin/kafka-server-stop.sh'
+    ```
     
 ## 포트 정보
 
 * `Kafka`: 9092
 * `Zookeeper`: 2181, 2888:3888
 
-## Tip
-
-    vi ~/.profile
-    ---
-    alias .pro='vi ~/.profile'
-    alias pro='. ~/.profile'
-    alias kconf='vi /kafka/config/server.properties'
-    alias zconf='vi /kafka/config/zookeeper.properties'
-    alias zstart='/kafka/bin/zookeeper-server-start.sh /kafka/config/zookeeper.properties'
-    alias kstart='/kafka/bin/kafka-server-start.sh /kafka/config/server.properties'
-
 #### [Zookeeper 설정](docs/install_zookeeper.md)
 #### [Kafka 설정](docs/install_kafka.md)
+#### [Kafka Test](docs/test.md)
 
 
