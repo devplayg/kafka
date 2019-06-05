@@ -5,9 +5,9 @@ A distributed streaming platform. https://kafka.apache.org/downloads
 ## 버전
 
 * `OS`: Docker Ubuntu 18.04
-* `Kafka`: 2.2
+* `Kafka`: 2.2 [[Download]](http://apache.mirror.cdnetworks.com/kafka/2.2.0/kafka_2.12-2.2.0.tgz)
 * `Zookeeper`: 3.4.13
-* `Java`: OpenJDK 11
+* `Java`: OpenJDK 11.0.3
 
 ## Docker 컨테이너 구성
 
@@ -19,6 +19,8 @@ A distributed streaming platform. https://kafka.apache.org/downloads
 |Kafka      | kafka1   | 172.17.0.5 |
 |           | kafka2   | 172.17.0.6 |
 |           | kafka3   | 172.17.0.7 |
+|Producer   | producer | 172.17.0.x |
+|Consomer   | consumer | 172.17.0.x |
 
 ## Docker OS 이미지 다운로드
 
@@ -44,7 +46,14 @@ docker pull ubuntu
     docker run -p 8003:9092 --name kafka3 -it ubuntu bash
     ```
 
-* 컨테이너 IP 확인
+* Producer/Consumer 컨테이너 생성
+  
+    ```  
+    docker run -p 8001:9092 --name producer -it ubuntu bash
+    docker run -p 8002:9092 --name consumer -it ubuntu bash
+    ```
+
+* Zookeeper/Kafka 컨테이너 IP 확인
 
     ```
     docker inspect -f "{{ .NetworkSettings.IPAddress }}" zoo1 zoo2 zoo3
@@ -61,30 +70,16 @@ docker pull ubuntu
     172.17.0.6
     172.17.0.7
     ```
-    
-## 호스트 파일 설정
-
-    ```
-    vi /etc/hosts
-    ---
-    172.17.0.2      zoo1
-    172.17.0.3      zoo2
-    172.17.0.4      zoo3
-    172.17.0.5      kafka1
-    172.17.0.6      kafka2
-    172.17.0.7      kafka3
-    ```
 
 ## 컨테이너 개별 설정
+
+* Kafka/Zookeeper 컨테이너 각각 접속
 
 * 필수 패키지 다운로드
     
     ```
     sed -i s#archive\.ubuntu\.com#mirror.kakao.com#g /etc/apt/sources.list
-    apt update && apt install -y vim net-tools inetutils-ping telnet curl openssh-server openjdk-11-jdk
-    echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
-    echo "root:1234" | chpasswd
-    service ssh start
+    apt update && apt install -y vim net-tools inetutils-ping telnet curl openjdk-11-jdk
     ```
 
 * Java 버전 확인
@@ -104,7 +99,20 @@ docker pull ubuntu
     mv /kafka_2.12-2.2.0/ /kafka
     ```
 
-## Tip
+* 호스트 파일 설정
+
+    ```
+    vi /etc/hosts
+    ---
+    172.17.0.2      zoo1
+    172.17.0.3      zoo2
+    172.17.0.4      zoo3
+    172.17.0.5      kafka1
+    172.17.0.6      kafka2
+    172.17.0.7      kafka3
+    ```
+
+* 환경변수 설정
 
     ```
     vi ~/.profile && . ~/.profile
@@ -112,7 +120,14 @@ docker pull ubuntu
     export ZOOKEEPER=zoo1:2181,zoo2:2181,zoo3:2181/my-kafka
     export KAFKA=kafka1:9092,kafka2:9092,kafka3:9092
     export KAFKA_HOME=/kafka
-    
+    ```
+
+## Tips (옵션)
+
+* 환경변수 추가 설정
+    ```
+    vi ~/.profile && . ~/.profile
+    ---
     alias .pro='vi ~/.profile'
     alias pro='. ~/.profile'
     alias kconf='vi $KAFKA_HOME/config/server.properties'
@@ -123,6 +138,15 @@ docker pull ubuntu
     alias kstop='$KAFKA_HOME/bin/kafka-server-stop.sh'
     ```
     
+* SSH 서비스 시작
+
+    ```
+    apt install -y openssh-server 
+    echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+    echo "root:1234" | chpasswd
+    service ssh start
+    ```
+    
 ## 포트 정보
 
 * `Kafka`: 9092
@@ -130,6 +154,6 @@ docker pull ubuntu
 
 #### [Zookeeper 설정](docs/install_zookeeper.md)
 #### [Kafka 설정](docs/install_kafka.md)
-#### [Kafka Test](docs/test.md)
+#### [Test](docs/test.md)
 
 

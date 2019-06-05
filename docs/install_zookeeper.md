@@ -1,5 +1,3 @@
-#### [목록](../README.md)
-
 ## Zookeeper 설정
     
 ### 컨테이너 공통 설정
@@ -41,5 +39,5 @@
 ### Zookeeper 컨테이너 시작
 
 ```
-/kafka/bin/zookeeper-server-start.sh /kafka/config/zookeeper.properties
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
 ```

@@ -25,7 +25,6 @@ func main() {
 }
 
 func sendThruSarama() {
-
 	config := sarama.NewConfig()
 	config.Producer.Partitioner = sarama.NewRandomPartitioner
 	config.Producer.RequiredAcks = sarama.WaitForAll

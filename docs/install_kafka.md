@@ -1,5 +1,3 @@
-#### [목록](../README.md)
-
 ## Kafka 설정
 
 | Kafka | Broker ID |IP|
@@ -8,7 +6,7 @@
 |kafka2| 2 |172.17.0.6|
 |kafka3| 3 |172.17.0.7|
 
-### 컨테이너 공통 설정
+### 컨테이너 개별 설정
 
 * 디렉토리 생성
 
@@ -18,7 +16,9 @@
 
 ### 컨테이너 개별 설정    
 
-    vi /kafka/config/server.properties
+```
+vi /kafka/config/server.properties
+```
 
 * kafka1
 
@@ -53,6 +53,9 @@
     ..(생략)
     ```
 
-kafka 시작
+* kafka 시작
 
-	
+    ```console
+    $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+    ```
+
