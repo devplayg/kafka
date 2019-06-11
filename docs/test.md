@@ -68,28 +68,6 @@
     Topic: my-topic Partition: 4    Leader: 1       Replicas: 3,1,2    Isr: 1,2,3   
     ```
 
-### Topic 생성
-
-```shell
-$KAFKA_HOME/bin/kafka-topics.sh --zookeeper $ZOOKEEPER --replication-factor 3 --partitions 5 --topic my-topic --create
-```
-
-### Topic 목록 조회
-
-    $KAFKA_HOME/bin/kafka-topics.sh --zookeeper $ZOOKEEPER -list
-    ---
-    my-topic
-
-### Topic 상세 조회
-
-    $KAFKA_HOME/bin/kafka-topics.sh --zookeeper $ZOOKEEPER --describe --topic my-topic 
-    ---
-    Topic: my-topic Partition: 0    Leader: 2       Replicas: 2,1,3    Isr: 2,1,3
-    Topic: my-topic Partition: 1    Leader: 3       Replicas: 3,2,1    Isr: 3,2,1
-    Topic: my-topic Partition: 2    Leader: 1       Replicas: 1,3,2    Isr: 1    
-    Topic: my-topic Partition: 3    Leader: 2       Replicas: 2,3,1    Isr: 2,3,1
-    Topic: my-topic Partition: 4    Leader: 3       Replicas: 3,1,2    Isr: 3,1,2
-
 ### 그룹 "testgroup2"의 Offset을 0으로 초기화
 
 변경
